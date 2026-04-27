@@ -148,7 +148,7 @@ This makes the app more controlled than a normal chat system and closer to a rea
 
 ---
 
-### ⚡ Real-Time Updates with WebSockets
+### Real-Time Updates with WebSockets
 - Messages and online status update instantly
 - No page reload required
 - Improves user experience compared to traditional apps
@@ -362,7 +362,7 @@ I used Alpine.js instead of heavy frameworks like React to keep the project simp
 
 ---
 
-### 🔄 Real-Time Communication
+###  Real-Time Communication
 
 #### WebSockets
 - Enables two-way communication between client and server
@@ -440,7 +440,7 @@ Follow the steps below to run the project locally.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/classcraic.git
+https://github.com/Musadiq071/ClassCraic_ChatApp.git
 
 cd classcraic
 ```
