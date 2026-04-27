@@ -1,4 +1,4 @@
-# ClassCraic 💬
+# ClassCraic 
 
 
 ## Overview
@@ -22,7 +22,7 @@ The goal of this project was to create a simple but structured communication sys
 
 ---
 
-## 🎯 Project Idea
+## Project Idea
 
 I wanted to build a system where:
 
@@ -43,11 +43,11 @@ This makes the app more controlled than a normal chat system and closer to a rea
 
 ---
 
-## 🚀 Features
+## Features
 
 ## Features
 
-### 🔐 Authentication & User Profiles
+###  Authentication & User Profiles
 - Users can create accounts and log in securely
 - Each user has a profile with:
   - username
@@ -121,7 +121,7 @@ This makes the app more controlled than a normal chat system and closer to a rea
 
 ---
 
-### 📎 File & Image Sharing
+###  File & Image Sharing
 - Users can upload files in chats
 - Images are displayed directly in the chat
 - Other file types are available for download
@@ -237,7 +237,7 @@ This information is updated in real-time and displayed in the chat interface.
 
 ---
 
-### 📎 File Handling
+### File Handling
 
 Messages can include file uploads.
 
@@ -248,7 +248,7 @@ Files are stored and linked to the message in the database.
 
 ---
 
-### 🗄️ Database Design
+###  Database Design
 
 The system uses PostgreSQL as the main database.
 
@@ -498,7 +498,7 @@ Then open:
 http://127.0.0.1:8000/
 
 
-🔄 Running with WebSockets (Channels)
+Running with WebSockets (Channels)
 
 This project uses Django Channels for real-time chat.
 
@@ -510,7 +510,7 @@ To run with WebSockets (optional in development):
 daphne chatapp.asgi:application
 
 
- Environment Variables (Recommended)
+ Environment Variables
 For better security, use environment variables for sensitive data:
 SECRET_KEY
 DATABASE_URL
@@ -520,17 +520,22 @@ export SECRET_KEY=your_secret_key
 export DEBUG=True
 
 
- Static Files (Production)
+## Static Files (Production)
 Before deployment:
 python manage.py collectstatic
 
- Deployment Notes
+# Deployment Notes
 For deployment:
 Use an ASGI server (Daphne)
 Use PostgreSQL database
 Set DEBUG = False
 Configure allowed hosts
 The project is deployed using Render with PostgreSQL.
+
+The project is deployed on Render can be accessed your link below 
+
+https://classcraic-chatapp.onrender.com
+
 
 
 
@@ -642,14 +647,14 @@ Future Improvements
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 Musa
 Final Year Computing Student
 
 ---
 
-## 📄 License
+##  License
 
 This project is for educational purposes.
 
