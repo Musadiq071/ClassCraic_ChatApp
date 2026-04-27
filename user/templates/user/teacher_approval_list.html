@@ -1,0 +1,92 @@
+{% extends 'layouts/box.html' %}
+
+{% block content %}
+
+<div class="space-y-8">
+
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">Teacher Approvals</h1>
+        <p class="text-sm text-gray-600">
+            Approve or disapprove teacher accounts.
+        </p>
+    </div>
+
+    <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Pending Teachers</h2>
+
+        {% if pending_teachers %}
+            <div class="space-y-4">
+                {% for profile in pending_teachers %}
+                    <div class="flex items-center justify-between gap-4 border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
+                        <div class="flex items-center gap-3">
+                            <img src="{{ profile.avatar }}"
+                                 class="h-12 w-12 rounded-full object-cover border border-gray-200"
+                                 alt="{{ profile.user.username }}">
+
+                            <div>
+                                <div class="font-semibold text-gray-900">
+                                    {{ profile.preferred_name|default:profile.user.username }}
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    @{{ profile.user.username }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <form method="POST" action="{% url 'approve-teacher' profile.user.username %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+                                Approve
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-sm text-gray-600">No pending teachers.</p>
+        {% endif %}
+    </div>
+
+    <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Approved Teachers</h2>
+
+        {% if approved_teachers %}
+            <div class="space-y-4">
+                {% for profile in approved_teachers %}
+                    <div class="flex items-center justify-between gap-4 border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
+                        <div class="flex items-center gap-3">
+                            <img src="{{ profile.avatar }}"
+                                 class="h-12 w-12 rounded-full object-cover border border-gray-200"
+                                 alt="{{ profile.user.username }}">
+
+                            <div>
+                                <div class="font-semibold text-gray-900">
+                                    {{ profile.preferred_name|default:profile.user.username }}
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    @{{ profile.user.username }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <form method="POST"
+                              action="{% url 'disapprove-teacher' profile.user.username %}"
+                              onsubmit="return confirm('Disapprove this teacher? Existing class groups will remain, but teacher privileges will be removed.')">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700">
+                                Disapprove
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-sm text-gray-600">No approved teachers.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

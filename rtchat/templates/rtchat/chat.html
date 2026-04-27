@@ -1,0 +1,250 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+
+<div class="mx-auto my-6 w-full max-w-5xl px-3 sm:my-8 sm:px-4">
+
+    <div class="mb-4 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div class="min-w-0">
+
+            {% if chat_group.chat_type == 'class' %}
+                {% if user == chat_group.teacher or user.is_staff %}
+                    <a href="{% url 'manage-group' chat_group.group_name %}"
+                       class="inline-flex items-center rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-indigo-600 hover:bg-gray-50">
+                        Manage Group
+                    </a>
+                {% endif %}
+            {% endif %}
+
+            {% if chat_group.chat_type == 'public' %}
+                <h2 class="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">Public Chat</h2>
+                <p class="mt-1 text-sm text-gray-500">
+                    A general space for students to introduce themselves and discuss college events.
+                </p>
+            {% else %}
+
+                {% if chat_group.chat_type == 'private' and other_user %}
+                    <h2 class="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">
+                        {{ other_user.profile.preferred_name|default:other_user.username }}
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-500">
+                        @{{ other_user.username }}
+                    </p>
+                {% else %}
+                    <h2 class="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">{{ chat_group.group_name }}</h2>
+                {% endif %}
+
+                {% if user == chat_group.teacher or user.is_staff %}
+                    <div class="mt-3 flex flex-wrap items-center gap-2">
+                        <span class="text-xs font-medium uppercase tracking-wide text-gray-500">Join code</span>
+
+                        <code id="join-code"
+                              class="rounded-lg bg-gray-900 px-3 py-1 text-sm font-semibold tracking-widest text-emerald-400">
+                            {{ chat_group.join_code }}
+                        </code>
+
+                        <button type="button"
+                                onclick="copyJoinCode()"
+                                class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700">
+                            Copy
+                        </button>
+
+                        <span id="copy-feedback" class="hidden text-xs text-emerald-600">
+                            Copied!
+                        </span>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        {% if chat_group.chat_type == 'class' or chat_group.chat_type == 'private' %}
+            <div class="shrink-0">
+                <a href="{% url 'leave-chat' chat_group.group_name %}"
+                   onclick="return confirm('Are you sure you want to leave this chat?')"
+                   class="inline-flex items-center rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-100">
+                    Leave chat
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div id="ws-root"
+         hx-ext="ws"
+         ws-connect="/ws/chatroom/{{ chat_group.group_name }}/">
+
+        <div id="chat_window"
+             class="flex h-[75vh] min-h-[32rem] flex-col overflow-hidden rounded-3xl border border-gray-200 bg-gray-900 shadow-xl sm:h-[78vh]">
+
+            <div id="online-icon"></div>
+
+            <div class="border-b border-gray-800 bg-gray-900 px-4 py-4">
+
+                {% if other_user %}
+                    <a href="{% url 'profile' other_user.username %}" class="flex items-center gap-3">
+                        <img class="h-11 w-11 rounded-full object-cover ring-2 ring-gray-700"
+                             src="{{ other_user.profile.avatar }}" />
+                        <div class="min-w-0">
+                            <div class="truncate font-semibold text-white">
+                                {{ other_user.profile.preferred_name|default:other_user.username }}
+                            </div>
+                            <div class="truncate text-xs text-gray-400">
+                                @{{ other_user.username }}
+                                {% if other_user_online %}
+                                    <span class="ml-2 text-emerald-400">• Online</span>
+                                {% else %}
+                                    <span class="ml-2 text-gray-500">• Offline</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+
+                {% elif chat_group.chat_type == 'class' %}
+                    <div>
+                        <div class="flex gap-4 overflow-x-auto pb-1">
+                            {% for member in chat_group.members.all %}
+                                <a href="{% url 'profile' member.username %}"
+                                   class="flex min-w-[60px] flex-col items-center text-center text-xs text-gray-400">
+                                    <img src="{{ member.profile.avatar }}"
+                                         class="h-11 w-11 rounded-full object-cover ring-2 ring-gray-700" />
+                                    <span class="mt-2 block max-w-[60px] truncate">
+                                        {{ member.profile.preferred_name|default:member.username|slice:":8" }}
+                                    </span>
+                                </a>
+                            {% empty %}
+                                <span class="text-sm text-gray-400">No members yet.</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mt-2 text-xs text-gray-400">
+                            {{ online_count }} online
+                        </div>
+                    </div>
+
+                {% else %}
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-emerald-400">Public Room</span>
+                        <span id="online-count" class="text-sm text-gray-300">{{ online_count }} online</span>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <div id="chat_container"
+                 class="min-h-0 flex-1 overflow-y-auto bg-gray-950 px-4 py-4">
+
+                <ul id="chat_messages" class="flex flex-col gap-3">
+                    {% for message in chat_messages reversed %}
+                        {% include 'rtchat/chat_message.html' %}
+                    {% endfor %}
+                </ul>
+
+                <div id="typing-indicator"
+                     class="px-2 pt-2 text-xs italic text-gray-400"></div>
+            </div>
+
+            <div class="border-t border-gray-800 bg-gray-900 p-4 space-y-3">
+
+                <form id="chat_message_form"
+                      class="flex items-center gap-3"
+                      ws-send
+                      _="on htmx:wsAfterSend reset() me">
+
+                    {% csrf_token %}
+
+                    <div class="flex-1">
+                        {{ form.body }}
+                    </div>
+                </form>
+
+                <form id="chat_file_form"
+                      class="flex flex-col gap-3 sm:flex-row sm:items-center"
+                      hx-post="{% url 'chat-attachment-upload' chat_group.group_name %}"
+                      hx-encoding="multipart/form-data"
+                      hx-target="#upload-errors"
+                      hx-swap="innerHTML"
+                      _="on htmx:afterRequest reset() me">
+
+                    {% csrf_token %}
+
+                    <input type="file"
+                           name="file"
+                           id="id_file"
+                           class="text-sm text-gray-300 file:mr-3 file:rounded-lg file:border-0 file:bg-gray-800 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-gray-700">
+
+                    <button type="submit"
+                            class="rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-700">
+                        Upload
+                    </button>
+                </form>
+
+                <div id="upload-errors" class="text-red-500 text-sm"></div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+function scrollToBottom(time=0) {
+    setTimeout(function () {
+        const container = document.getElementById('chat_container');
+        if (container) {
+            container.scrollTop = container.scrollHeight;
+        }
+    }, time);
+}
+
+function copyJoinCode() {
+    const codeElement = document.getElementById('join-code');
+    const feedback = document.getElementById('copy-feedback');
+
+    if (!codeElement) return;
+
+    const code = codeElement.innerText.trim();
+
+    navigator.clipboard.writeText(code).then(() => {
+        if (feedback) {
+            feedback.classList.remove('hidden');
+            setTimeout(() => {
+                feedback.classList.add('hidden');
+            }, 1500);
+        }
+    }).catch((err) => {
+        console.error('Failed to copy join code:', err);
+    });
+}
+
+window.addEventListener("load", function () {
+    scrollToBottom();
+});
+
+document.body.addEventListener("htmx:afterSwap", function (event) {
+    if (event.target.id === "chat_messages") {
+        scrollToBottom();
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const messageForm = document.getElementById('chat_message_form');
+    const messageInput = document.querySelector('#chat_message_form input');
+    const errorBox = document.getElementById('upload-errors');
+
+    if (messageInput && errorBox) {
+        messageInput.addEventListener('input', function () {
+            errorBox.innerHTML = '';
+        });
+    }
+
+    if (messageForm && errorBox) {
+        messageForm.addEventListener('submit', function () {
+            errorBox.innerHTML = '';
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,46 @@
+<span id="online-count"
+      hx-swap-oob="outerHTML"
+      class="inline-flex items-center gap-2 text-sm text-gray-300 transition-all duration-200">
+
+    {% if online_count > 0 %}
+        <!-- ACTIVE: others online -->
+        <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-70"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+        </span>
+
+        <span class="online-text">
+            {{ online_count }} online
+        </span>
+    {% else %}
+        <!-- INACTIVE: only you -->
+        <span class="relative flex h-2 w-2">
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-gray-500"></span>
+        </span>
+
+        <span class="online-text text-gray-400">
+            Only you online
+        </span>
+    {% endif %}
+</span>
+
+<!-- Animation -->
+<style>
+.pop-animate {
+    transform: scale(1.06);
+    transition: transform 0.2s ease;
+}
+</style>
+
+<script>
+document.addEventListener("htmx:oobAfterSwap", function () {
+    const counter = document.getElementById("online-count");
+    if (!counter) return;
+
+    counter.classList.add("pop-animate");
+
+    setTimeout(() => {
+        counter.classList.remove("pop-animate");
+    }, 200);
+});
+</script>

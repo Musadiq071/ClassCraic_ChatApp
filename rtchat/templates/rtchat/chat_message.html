@@ -1,0 +1,106 @@
+{% if message.author == user %}
+<li class="flex justify-end mb-3">
+    <div class="bg-green-200 rounded-l-lg rounded-tr-lg px-3 py-2 w-fit max-w-[70%] space-y-1">
+        
+        {% if message.body %}
+            <div class="text-sm">
+                {{ message.body }}
+            </div>
+        {% endif %}
+
+        {% if message.file %}
+            {% with file_name=message.file.name|lower %}
+                {% if '.jpg' in file_name or '.jpeg' in file_name or '.png' in file_name or '.gif' in file_name %}
+                    <a href="{{ message.file.url }}" target="_blank">
+                        <img class="max-w-60 min-w-8 rounded-lg" src="{{ message.file.url }}" alt="Uploaded file">
+                    </a>
+                {% else %}
+                    <a href="{{ message.file.url }}" target="_blank" class="text-sm text-blue-700 underline break-all">
+                        {{ message.file.name|cut:"files/" }}
+                    </a>
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+
+        {#Message timestam #}
+        <div class="text-[11px] text-right text-green-900/70">
+            {{ message.created|date:"g:i A" }}
+        </div>
+
+    </div>
+
+    <div class="flex items-end">
+        <svg height="13" width="8">
+            <path fill="#bbf7d0" d="M6.3,10.4C1.5,8.7,0.9,5.5,0,0.2L0,13l5.2,0C7,13,9.6,11.5,6.3,10.4z"/>
+        </svg>
+    </div>
+</li>
+
+
+{% else %}
+<li>
+    <div class="flex justify-start mb-3">
+
+        <div class="flex items-end mr-2">
+            <a href="{% url 'profile' message.author.username %}">
+                <img class="w-8 h-8 rounded-full object-cover"
+                     src="{{ message.author.profile.avatar }}">
+            </a>
+        </div>
+
+        <div class="flex items-end">
+            <svg height="13" width="8">
+                <path fill="white"
+                      d="M2.8,13L8,13L8,0.2C7.1,5.5,6.5,8.7,1.7,10.4C-1.6,11.5,1,13,2.8,13z">
+                </path>
+            </svg>
+        </div>
+
+        <div class="bg-white px-3 py-2 w-fit max-w-[70%] rounded-r-lg rounded-tl-lg space-y-1">
+            
+            {% if message.body %}
+                <div class="text-sm">
+                    {{ message.body }}
+                </div>
+            {% endif %}
+
+            {% if message.file %}
+                {% with file_name=message.file.name|lower %}
+                    {% if '.jpg' in file_name or '.jpeg' in file_name or '.png' in file_name or '.gif' in file_name %}
+                        <a href="{{ message.file.url }}" target="_blank">
+                            <img class="max-w-60 min-w-8 rounded-lg" src="{{ message.file.url }}" alt="Uploaded file">
+                        </a>
+                    {% else %}
+                        <a href="{{ message.file.url }}" target="_blank" class="text-sm text-blue-600 underline break-all">
+                            {{ message.file.name|cut:"files/" }}
+                        </a>
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+
+            <!-- TIME -->
+            <div class="text-[11px] text-right text-gray-500">
+                {{ message.created|date:"g:i A" }}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="text-xs py-1 ml-10 flex items-center gap-2">
+        <span class="text-white font-medium">
+            {{ message.author.profile.preferred_name|default:message.author.username }}
+        </span>
+
+        {% if message.author.is_staff %}
+            <span class="w-2 h-2 rounded-full bg-green-500" title="Admin"></span>
+        {% elif message.author.profile.role == 'teacher' and message.author.profile.teacher_approved %}
+            <span class="w-2 h-2 rounded-full bg-red-500" title="Teacher"></span>
+        {% endif %}
+
+        <span class="text-gray-400">
+            @{{ message.author.username }}
+        </span>
+    </div>
+</li>
+{% endif %}

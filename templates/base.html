@@ -1,0 +1,166 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Title</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style type="text/tailwindcss">
+        [x-cloak] {
+            display: none !important;
+        }
+
+        html {
+            @apply bg-gray-50;
+        }
+
+        body {
+            @apply bg-gray-50 text-gray-900 min-h-screen;
+        }
+
+        h1 {
+            @apply text-4xl font-bold mb-4 text-gray-900;
+        }
+
+        h2 {
+            @apply text-2xl font-bold mb-2 text-gray-900;
+        }
+
+        p {
+            @apply mb-4 text-black;
+        }
+
+        .button, button, [type='submit'], [type='button'] {
+            @apply inline-flex items-center justify-center rounded-lg bg-indigo-600 px-5 py-3 font-semibold text-white transition cursor-pointer;
+        }
+
+        .button:hover, button:hover, [type='submit']:hover, [type='button']:hover {
+            @apply bg-indigo-700;
+        }
+
+        .button:active, button:active, [type='submit']:active, [type='button']:active {
+            @apply scale-95;
+        }
+
+        .button.alert, button.alert {
+            @apply bg-red-600;
+        }
+
+        .button.alert:hover, button.alert:hover {
+            @apply bg-red-700;
+        }
+
+        .button-red {
+            @apply !bg-red-500 hover:!bg-red-600;
+        }
+
+        .button-gray {
+            @apply !bg-gray-200 !text-gray-900 hover:!bg-gray-300;
+        }
+
+        .navitems > li > a {
+            @apply flex items-center gap-2 h-11 px-4 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition;
+        }
+
+        .hoverlist > * {
+            @apply rounded-md transition duration-150 hover:bg-gray-100;
+        }
+
+        .hoverlist > * > a {
+            @apply flex items-center p-2;
+        }
+
+        .highlight {
+            @apply !bg-indigo-50;
+        }
+
+        .allauth content a {
+            @apply underline underline-offset-2;
+        }
+
+        .allauth content a:hover {
+            @apply text-indigo-600;
+        }
+
+        .allauth form[action="/accounts/signup/"] ul {
+            @apply hidden;
+        }
+
+        .allauth form[action="/accounts/signup/"] ul.errorlist {
+            @apply block;
+        }
+
+        .allauth .helptext {
+            @apply block mt-4 text-sm text-gray-500;
+        }
+
+        label {
+            @apply block mb-2 text-sm font-medium text-gray-700;
+        }
+
+        #chat_message_form label,
+        #chat_file_form label {
+            @apply hidden;
+        }
+
+        input[type="file"] {
+            @apply bg-transparent pl-0;
+        }
+
+        .textarea, textarea, input {
+            @apply w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none;
+        }
+
+        textarea:focus, input:focus {
+            @apply border-indigo-500 ring-2 ring-indigo-100;
+        }
+
+        .errorlist li {
+            @apply mb-2 border-l-4 border-red-500 pl-4 p-1 text-red-600;
+        }
+
+        label[for="id_remember"] {
+            @apply inline-block w-auto mr-2;
+        }
+
+        input[name="remember"] {
+            @apply w-auto;
+        }
+
+        .alert-info {
+            @apply bg-blue-100 text-blue-800;
+        }
+
+        .alert-success {
+            @apply bg-emerald-100 text-emerald-800;
+        }
+
+        .alert-warning {
+            @apply bg-amber-100 text-amber-800;
+        }
+
+        .alert-danger {
+            @apply bg-red-100 text-red-800;
+        }
+    </style>
+</head>
+<body class="{% block class %}{% endblock %}">
+
+    {% include 'includes/message.html' %}
+    {% include 'includes/header.html' %}
+
+    {% block layout %}{% endblock %}
+    {% block javascript %}{% endblock %}
+
+</body>
+</html>

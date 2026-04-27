@@ -1,0 +1,54 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+
+    <div class="mb-8 rounded-3xl border border-gray-200 bg-white p-6 sm:p-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Start Chat</h1>
+        <p class="text-gray-600 mb-0">
+            Choose a person to start a private conversation.
+        </p>
+    </div>
+
+    <div class="rounded-3xl border border-gray-200 bg-white p-6 sm:p-8">
+        {% if users %}
+            <div class="grid gap-4 md:grid-cols-2">
+                {% for person in users %}
+                    <a href="{% url 'start-private-chat' person.username %}"
+                       class="block rounded-2xl border border-gray-200 bg-gray-50 p-4 transition hover:border-indigo-300 hover:bg-white hover:shadow-sm">
+
+                        <div class="flex items-center justify-between gap-4">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <img
+                                    src="{{ person.profile.avatar }}"
+                                    alt="{{ person.username }}"
+                                    class="h-11 w-11 rounded-full object-cover border border-gray-200"
+                                >
+
+                                <div class="min-w-0">
+                                    <div class="font-semibold text-gray-900 truncate">
+                                        {{ person.profile.preferred_name|default:person.username }}
+                                    </div>
+                                    <div class="text-sm text-gray-500 truncate">
+                                        @{{ person.username }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <span class="shrink-0 rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700">
+                                Message
+                            </span>
+                        </div>
+
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-sm text-gray-600">No users available to chat with.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}
