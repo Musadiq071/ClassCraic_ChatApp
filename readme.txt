@@ -58,7 +58,7 @@ This makes the app more controlled than a normal chat system and closer to a rea
 
 ---
 
-### 💬 Real-Time Chat System
+###  Real-Time Chat System
 - Messages are sent and received instantly without refreshing the page
 - Built using WebSockets (Django Channels)
 - Supports both text messages and file sharing

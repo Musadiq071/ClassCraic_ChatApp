@@ -9,7 +9,11 @@ from django.views.decorators.http import require_POST
 
 from .models import ChatGroup
 from .forms import ChatmessageCreateForm, JoinClassForm, CreateClassGroupForm
-
+#3rd party translator
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from deep_translator import GoogleTranslator
+from .models import GroupMessage
 
 def is_group_teacher(user, group):
     return (
@@ -268,3 +272,21 @@ def delete_group(request, group_name):
     messages.success(request, "Group deleted successfully.")
 
     return redirect('home')
+
+#Translator view
+@login_required
+def translate_message(request, message_id):
+    message = get_object_or_404(GroupMessage, id=message_id)
+
+    try:
+        translated_text = GoogleTranslator(
+            source='auto',
+            target='en'
+        ).translate(message.body)
+
+    except Exception:
+        translated_text = "Translation unavailable right now."
+
+    return render(request, "rtchat/partials/translated_message.html", {
+        "translated_text": translated_text
+    })

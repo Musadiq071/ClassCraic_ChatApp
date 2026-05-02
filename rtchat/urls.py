@@ -22,4 +22,6 @@ urlpatterns = [
 
     #File upload 
     path('chat/attachment_upload/<group_name>/', chat_attachment_upload, name="chat-attachment-upload"),
+    #Translation
+    path('message/<int:message_id>/translate/', translate_message, name='translate-message'),
 ]

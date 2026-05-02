@@ -6,6 +6,16 @@
             <div class="text-sm">
                 {{ message.body }}
             </div>
+
+            <button
+                hx-get="{% url 'translate-message' message.id %}"
+                hx-target="#translation-{{ message.id }}"
+                hx-swap="innerHTML"
+                class="text-[9px] underline opacity-70 hover:opacity-100">
+                Translate
+            </button>
+
+            <div id="translation-{{ message.id }}"></div>
         {% endif %}
 
         {% if message.file %}
@@ -62,6 +72,16 @@
                 <div class="text-sm">
                     {{ message.body }}
                 </div>
+
+                <button
+                    hx-get="{% url 'translate-message' message.id %}"
+                    hx-target="#translation-{{ message.id }}"
+                    hx-swap="innerHTML"
+                    class="text-[11px] underline opacity-70 hover:opacity-100">
+                    Translate
+                </button>
+
+                <div id="translation-{{ message.id }}"></div>
             {% endif %}
 
             {% if message.file %}
