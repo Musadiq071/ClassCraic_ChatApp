@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
-    #3rd party
+    #3rd party middleware
     "allauth.account.middleware.AccountMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     
@@ -63,10 +63,9 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     
-    # Needed to login by username in Django admin, regardless of `allauth`
+    # default django login support
     'django.contrib.auth.backends.ModelBackend',
-
-    # `allauth` specific authentication methods, such as login by email
+    #all auth login support 
     'allauth.account.auth_backends.AuthenticationBackend',
     
 ]
@@ -88,7 +87,7 @@ TEMPLATES = [
     },
 ]
 
-#ASGI is used because project supports Websockets by django chanels
+#ASGI is used because project supports Websockets by django channels
 ASGI_APPLICATION = 'chatapp.asgi.application'
 
 #channels layer configuration 
@@ -110,6 +109,7 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL'),
+        
         conn_max_age=600
     )
 }
@@ -164,6 +164,18 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
+
+
+
 #Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT =  BASE_DIR / 'media' 
@@ -175,7 +187,7 @@ MEDIA_ROOT =  BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/'
 
-#email backends
+#email backends for development 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True

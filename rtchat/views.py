@@ -2,18 +2,16 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 
-from .models import ChatGroup
-from .forms import ChatmessageCreateForm, JoinClassForm, CreateClassGroupForm
-#3rd party translator
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 from deep_translator import GoogleTranslator
-from .models import GroupMessage
+
+from .models import ChatGroup, GroupMessage
+from .forms import ChatmessageCreateForm, JoinClassForm, CreateClassGroupForm
+
 
 def is_group_teacher(user, group):
     return (
@@ -26,9 +24,11 @@ def is_group_teacher(user, group):
 def can_manage_group(user, group):
     return user.is_staff or user.is_superuser or is_group_teacher(user, group)
 
+
 def can_access_group(user, group):
     is_member = group.members.filter(id=user.id).exists()
     return can_manage_group(user, group) or is_member
+
 
 @login_required
 def chat_view(request):
@@ -40,11 +40,13 @@ def chat_view(request):
 
     chat_messages = chat_group.chat_messages.all()[:30]
     form = ChatmessageCreateForm()
+    online_count = chat_group.users_online.count()
 
     return render(request, 'rtchat/chat.html', {
         'chat_group': chat_group,
         'chat_messages': chat_messages,
         'form': form,
+        'online_count':online_count,
     })
 
 
@@ -55,9 +57,7 @@ def chatroom_view(request, group_name):
     if chat_group.chat_type == 'public':
         return redirect('home')
 
-    is_member = chat_group.members.filter(id=request.user.id).exists()
-
-    if not (can_manage_group(request.user, chat_group) or is_member):
+    if not can_access_group(request.user, chat_group):
         messages.warning(request, "You are not allowed to access this chat.")
         return redirect('home')
 
@@ -144,6 +144,7 @@ def start_private_chat(request, username):
         messages.warning(request, "You cannot start a chat with yourself.")
         return redirect('home')
 
+    # fixed name avoids duplicate private chats
     user1_id = min(request.user.id, other_user.id)
     user2_id = max(request.user.id, other_user.id)
     group_name = f"pm-{user1_id}-{user2_id}"
@@ -165,12 +166,12 @@ def start_private_chat(request, username):
 @login_required
 def chat_attachment_upload(request, group_name):
     chat_group = get_object_or_404(ChatGroup, group_name=group_name)
-    
-    #checking permission before user upload files
+
+    # check permission before upload
     if chat_group.chat_type != 'public' and not can_access_group(request.user, chat_group):
         messages.warning(request, "You are not allowed to upload files to this chat.")
         return redirect('home')
-    
+
     form = ChatmessageCreateForm(request.POST, request.FILES)
 
     if form.is_valid():
@@ -273,10 +274,15 @@ def delete_group(request, group_name):
 
     return redirect('home')
 
-#Translator view
+
 @login_required
+#Translate message feature
 def translate_message(request, message_id):
     message = get_object_or_404(GroupMessage, id=message_id)
+
+    # check if user can access translated message
+    if message.group.chat_type != 'public' and not can_access_group(request.user, message.group):
+        return HttpResponse("Not allowed", status=403)
 
     try:
         translated_text = GoogleTranslator(

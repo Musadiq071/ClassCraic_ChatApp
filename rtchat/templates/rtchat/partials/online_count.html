@@ -3,7 +3,7 @@
       class="inline-flex items-center gap-2 text-sm text-gray-300 transition-all duration-200">
 
     {% if online_count > 0 %}
-        <!-- ACTIVE: others online -->
+        
         <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-70"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -13,7 +13,7 @@
             {{ online_count }} online
         </span>
     {% else %}
-        <!-- INACTIVE: only you -->
+        
         <span class="relative flex h-2 w-2">
             <span class="relative inline-flex rounded-full h-2 w-2 bg-gray-500"></span>
         </span>
@@ -24,7 +24,7 @@
     {% endif %}
 </span>
 
-<!-- Animation -->
+
 <style>
 .pop-animate {
     transform: scale(1.06);

@@ -3,15 +3,13 @@
 {% block content %}
 
 <div class="max-w-lg mx-auto flex flex-col items-center pt-20 px-4">
-    
-    <!-- Avatar -->
+
     <img class="w-36 h-36 rounded-full object-cover mb-4" src="{{ profile.avatar }}" />
 
     <div class="text-center">
-        
-        <!-- Name + Role -->
+
         <div class="flex items-center justify-center gap-2">
-            <h1 class="text-2xl font-bold text-white">
+            <h1 class="text-2xl font-bold text-gray-900">
                 {{ profile.preferred_name|default:profile.user.username }}
             </h1>
 
@@ -26,12 +24,10 @@
             {% endif %}
         </div>
 
-        <!-- Username -->
-        <div class="text-gray-400 mb-2">
+        <div class="text-gray-500 mb-2">
             @{{ profile.user.username }}
         </div>
 
-        <!-- ✅ Message Button (only for other users) -->
         {% if request.user != profile.user %}
             <div class="mt-4">
                 <a href="{% url 'start-private-chat' profile.user.username %}"
@@ -41,9 +37,8 @@
             </div>
         {% endif %}
 
-        <!-- Bio -->
         {% if profile.info %}
-            <div class="mt-8 text-gray-200">
+            <div class="mt-8 text-gray-700 leading-relaxed">
                 {{ profile.info|linebreaksbr }}
             </div>
         {% endif %}

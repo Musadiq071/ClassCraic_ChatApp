@@ -24,7 +24,9 @@ def home_view(request):
         private_groups = request.user.joined_chat_groups.filter(chat_type='private')
 
         for group in private_groups:
+            #get other person in chat
             other_user = group.members.exclude(id=request.user.id).first()
+            #latest message since
             last_message = group.chat_messages.first()
             
             if other_user:
@@ -44,6 +46,6 @@ def home_view(request):
 
     return render(request, 'home.html', context)
 
-
+#about page 
 def about_view(request):
     return render(request, "about.html")

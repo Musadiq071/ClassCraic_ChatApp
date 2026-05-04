@@ -21,7 +21,7 @@ urlpatterns = [
     path('join-group/', join_class_group, name='join-group'),
 
     #File upload 
-    path('chat/attachment_upload/<group_name>/', chat_attachment_upload, name="chat-attachment-upload"),
+    path('chat/attachment_upload/<str:group_name>/', chat_attachment_upload, name="chat-attachment-upload"),
     #Translation
     path('message/<int:message_id>/translate/', translate_message, name='translate-message'),
 ]

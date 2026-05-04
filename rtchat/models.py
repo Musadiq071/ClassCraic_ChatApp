@@ -13,6 +13,7 @@ class ChatGroup(models.Model):
     group_name = models.CharField(max_length=120, unique=True)
     chat_type = models.CharField(max_length=10, choices=CHAT_TYPE_CHOICES, default='public')
 
+    #used to join chat_group by students 
     join_code = models.CharField(max_length=12, unique=True, blank=True, null=True)
 
     users_online = models.ManyToManyField(User, related_name='online_in_groups', blank=True)
@@ -44,6 +45,7 @@ class GroupMessage(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
+        #allow message text, file or both 
         body = (self.body or '').strip()
         if not body and not self.file:
             raise ValidationError("Message must contain text or an attachment.")
