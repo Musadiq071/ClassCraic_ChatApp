@@ -3,8 +3,7 @@
 
 ## Overview
 
-
-Class Craic is speciallly designed for the purpose of communication among teachers and students. The platform provides multiple forms of interaction which include public chat, Private messaging and class-based group chats.
+Class Craic is specially designed for the purpose of communication among teachers and students. The platform provides multiple forms of interaction which include public chat, Private messaging and class-based group chats.
 
 Users can create accounts and manage their profiles, choose their role and start exploring the application.
 
@@ -22,13 +21,9 @@ The goal of this project was to create a simple but structured communication sys
 
 ---
 
-## Project Idea
-
-I wanted to build a system where:
-
 ## Project Aim
 
-I wanted to build ClassCraic because many existing chat applications are very general-purpose and not specifically designed for an educational environment. My aim was to create a simple and focused platform tailored for students and teachers, where communication is structured and relevant to academic use.
+I wanted to build ClassCraic Chat App  because many existing chat applications are very general-purpose and not specifically designed for an educational environment. My aim was to create a simple and focused platform tailored for students and teachers, where communication is structured and relevant to academic use.
 
 The goal was to include only the necessary features such as group discussions, private messaging, and file sharing, while keeping the interface easy to use and not overloaded with unnecessary complexity.
 
@@ -38,12 +33,13 @@ Another important part of the project was to support practical use cases, such a
 
 In addition, I wanted this project to be useful beyond just a final-year submission. The system is designed in a way that small colleges or institutions with limited budgets could potentially reuse or adapt the code to build their own internal communication platform.
 
+Moreover, it also offers language translation feature by which different language text can be translated into English in an effort to break language barrier among peers.
+
 Overall, the focus of this project was to create a clean, functional, and educational-focused chat system that demonstrates real-time communication, role-based access control, and practical usability.
 This makes the app more controlled than a normal chat system and closer to a real educational platform.
 
 ---
 
-## Features
 
 ## Features
 
@@ -64,6 +60,7 @@ This makes the app more controlled than a normal chat system and closer to a rea
 - Supports both text messages and file sharing
 
 ---
+
 
 ###  Public Chat
 - Open chat space available to all users
@@ -126,6 +123,44 @@ This makes the app more controlled than a normal chat system and closer to a rea
 - Images are displayed directly in the chat
 - Other file types are available for download
 
+
+---
+
+### Message Translation
+
+The application includes a message translation feature implemented using the `deep-translator` python library.
+
+This allows users to translate chat messages into English directly within the chat interface.
+
+#### Installation
+
+The translation library is included in the project dependencies. If needed, it can be installed manually:
+
+```bash
+pip install deep-translator==1.11.4
+```
+
+#### How It Works
+
+- When a user requests translation, the message text is processed using the library
+- The source language is automatically detected
+- The message is translated into English
+- The translated text is displayed without refreshing the page
+
+#### Example Usage:
+
+```python
+from deep_translator import GoogleTranslator
+
+translated_text = GoogleTranslator(
+    source='auto',
+    target='en'
+).translate("Hola mundo")
+```
+
+#### Points to note
+- If translation fails, a fallback message is shown
+- The main chat system works independently of this feature
 
 ---
 
@@ -218,9 +253,7 @@ If a teacher is disapproved:
 - They lose access to teacher features
 - Their existing class groups remain active
 
-This helps to reduce risk of student data loss like chats history and when in future a new teacher is assigned 
-she can manage the group which  keeps the system running and stable 
-
+This helps to reduce risk of student data loss like chats history.
 ---
 
 ###  Online User Tracking
@@ -243,6 +276,7 @@ Messages can include file uploads.
 
 - Images are displayed directly in the chat
 - Other files are available as download links
+- File size can't exceed 5MB.
 
 Files are stored and linked to the message in the database.
 
@@ -290,8 +324,8 @@ This project uses a combination of backend, frontend, and real-time technologies
   - authentication system
   - database models
 
-I chose Django because it provides a structured and secure way to build full-stack applications quickly.
-
+I chose Django to built this project  because it provides a structured and secure way to build full-stack applications 
+with many built-in features, and also because I already have strong experience and familiarity with it, which helped me to develop the project more efficiently.
 ---
 
 #### Django Channels
@@ -305,6 +339,10 @@ Used for:
 I used Channels because Django alone follows a request-response model and does not support real-time updates.
 
 ---
+#### Redis
+- Used as the channel layer for Django Channels
+- Handles real-time message broadcasting and online user tracking
+
 
 #### Daphne (ASGI Server)
 - Used to run the application with WebSocket support
@@ -318,7 +356,8 @@ I used Channels because Django alone follows a request-response model and does n
   - signup/login
   - account management
 
-I used it to avoid building authentication from scratch and to ensure security.
+I used Django Allauth because it offers secure and structured handling of authentication, 
+and it is flexible enough to extend for role-based features like teachers and students in my application.
 
 ---
 
@@ -327,14 +366,14 @@ I used it to avoid building authentication from scratch and to ensure security.
 ###  Frontend
 
 #### HTML (Django Templates)
-- Used to build the UI structure
+- HTML is used to build the UI structure
 - Integrated with Django template engine for dynamic content
 
 ---
 
 #### Tailwind CSS
 - Used for styling the UI
-- Provides utility classes for fast design
+- Provides utility classes for fast and better design
 
 I chose Tailwind because it allows building clean and responsive layouts quickly.
 
@@ -356,7 +395,7 @@ Helps reduce JavaScript complexity.
   - dropdown menus
   - UI interactions
 
-I used Alpine.js instead of heavy frameworks like React to keep the project simple.
+I used Alpine.js instead of heavy frameworks like React to keep the project simple and light-weight.
 
 ---
 
@@ -385,8 +424,8 @@ This is the core technology behind the chat system.
   - messages
   - chat groups
 
-I switched from SQLite to PostgreSQL because:
-- better performance with multiple users
+I switched from SQLite to PostgreSQL because :
+- of its better performance with multiple users
 - more suitable for production
 - handles concurrent operations better
 
@@ -430,161 +469,275 @@ I switched from SQLite to PostgreSQL because:
 
 
 ---
-
-##  Installation & Setup
+## Installation & Setup
 
 Follow the steps below to run the project locally.
+
+**Python 3.10+ is recommended**
 
 ---
 
 ### 1. Clone the Repository
 
 ```bash
-https://github.com/Musadiq071/ClassCraic_ChatApp.git
-
-cd classcraic
+git clone https://github.com/Musadiq071/ClassCraic_ChatApp.git
+cd ClassCraic_ChatApp
 ```
 
+---
 
-2. Create a Virtual Environment
+### 2. Create a Virtual Environment
+
+```bash
 python -m venv env
-
+```
 
 Activate the environment:
-Mac/Linux:
+
+**Mac/Linux:**
+```bash
 source env/bin/activate
+```
 
-Windows:
+**Windows:**
+```bash
 env\Scripts\activate
+```
 
-3. Install Dependencies
+---
+
+### 3. Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
+---
 
-4. Set Up PostgreSQL Database
+### Install PostgreSQL
+
+Make sure PostgreSQL is installed and running on your system.
+
+Download from:  
+https://www.postgresql.org/download/
+
+After installation, ensure the PostgreSQL service is running before creating the database.
+
+---
+
+### 4. Set Up PostgreSQL Database
+
 Create a PostgreSQL database and user.
 
-Then update your settings.py:
+```sql
+CREATE DATABASE classcraic;
+CREATE USER your_user WITH PASSWORD 'your_password';
+ALTER ROLE your_user SET client_encoding TO 'utf8';
+ALTER ROLE your_user SET default_transaction_isolation TO 'read committed';
+ALTER ROLE your_user SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE classcraic TO your_user;
+```
+
+Then update your `settings.py`:
+
+```python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'classcraic',
-        'USER': 'your_user',
-        'PASSWORD': 'your_password',
+        'NAME': 'classcraic',  # create this DB in PostgreSQL
+        'USER': 'your_user',   # replace with your local PostgreSQL username
+        'PASSWORD': 'your_password',  # replace with your PostgreSQL password
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
+```
 
 If you encounter permission issues, run:
 
+```sql
 GRANT USAGE, CREATE ON SCHEMA public TO your_user;
+```
 
+---
 
-5. Apply Migrations
+### 5. Install & Run Redis
 
+This project uses Redis for real-time communication.
+
+**Redis must be running before starting the server, otherwise real-time features will not work.**
+
+#### Mac (Homebrew):
+```bash
+brew install redis
+brew services start redis
+```
+
+#### Linux:
+```bash
+sudo apt install redis-server
+sudo systemctl start redis
+```
+
+#### Windows:
+Install Redis using Docker or third-party builds.
+
+For Docker:
+```bash
+docker run -p 6379:6379 redis
+```
+
+#### Verify Redis is running:
+```bash
+redis-cli ping
+```
+
+Expected output:
+```bash
+PONG
+```
+
+---
+
+### 6. Apply Migrations
+
+```bash
+python manage.py makemigrations
 python manage.py migrate
+```
 
+---
 
-6. Create Superuser (Admin)
+### 7. Create Superuser (Admin)
 
+```bash
 python manage.py createsuperuser
+```
 
-7. Run Development Server
+---
 
+### 8. Run Development Server
+
+```bash
 python manage.py runserver
+```
+
 Then open:
 
 http://127.0.0.1:8000/
 
+After logging in:
+- Create or log in as admin  
+- Approve a teacher account  
+- Create a class group  
+- Join using the group code  
 
-Running with WebSockets (Channels)
+---
+
+## Running with Daphne
 
 This project uses Django Channels for real-time chat.
 
-Make sure the project is configured with:
+For normal local development, use:
 
-ASGI_APPLICATION in settings.py
-daphne installed
-To run with WebSockets (optional in development):
+```bash
+python manage.py runserver
+```
+
+To run using Daphne directly (optional, for production-like testing):
+
+```bash
 daphne chatapp.asgi:application
+```
 
+---
 
- Environment Variables
+## Environment Variables
+
 For better security, use environment variables for sensitive data:
-SECRET_KEY
-DATABASE_URL
-DEBUG
+
+- SECRET_KEY  
+- DATABASE_URL  
+- DEBUG  
+- REDIS_URL  
+
+If environment variables are not set, default values in `settings.py` will be used.
+
 Example:
+
+```bash
 export SECRET_KEY=your_secret_key
 export DEBUG=True
+```
+---
 
 
-## Static Files (Production)
-Before deployment:
-python manage.py collectstatic
+## Deployment Notes(Optional)
 
-# Deployment Notes
 For deployment:
-Use an ASGI server (Daphne)
-Use PostgreSQL database
-Set DEBUG = False
-Configure allowed hosts
-The project is deployed using Render with PostgreSQL.
 
-The project is deployed on Render can be accessed your link below 
+- Use an ASGI server (Daphne)  
+- Use PostgreSQL database  
+- Set DEBUG = False  
+- Configure allowed hosts  
+
+The project is deployed using Render with PostgreSQL and redis.
+
+The project is deployed on Render and can be accessed below:
 
 https://classcraic-chatapp.onrender.com
 
+### Extra Notes Based on My Journey in Completing This Project
 
+These notes may help anyone who wishes to explore or extend the project further.
 
+---
 
-
-##  Challenges Faced
+## Challenges Faced
 
 During the development of this project, I encountered several practical challenges across backend logic, real-time communication, UI design, and database configuration. These issues helped me understand the system more deeply.
 
 ---
 
-###  Integrating Django Allauth with Custom Roles
+### Integrating Django Allauth with Custom Roles
 
 One of the first challenges was integrating Django Allauth with my custom user profile system. I needed to support role-based functionality (student, teacher, admin), but Allauth does not directly handle custom roles.
 
 I faced issues with:
-- linking user profiles to authentication
-- managing role-based access after login
-- UI inconsistencies in Allauth templates
+- linking user profiles to authentication  
+- managing role-based access after login  
+- UI inconsistencies in Allauth templates  
 
-**Solution:**
+**Solution:**  
 I extended the user model using a profile model and manually handled role-based logic in views. I also customised the Allauth templates to match my application UI.
 
 ---
 
-###  WebSockets Connection Issues (Django Channels)
+### WebSockets Connection Issues (Django Channels)
 
 While implementing real-time chat, I faced problems with WebSocket connections not working properly.
 
 The issue was caused by:
-- mismatched versions of HTMX WebSocket extensions
-- incorrect WebSocket setup
+- mismatched versions of HTMX WebSocket extensions  
+- incorrect WebSocket setup  
 
-**Solution:**
+**Solution:**  
 I ensured that the correct HTMX WebSocket extension (`hx-ext="ws"`) was used and matched with the proper script version. I also verified the ASGI configuration and ensured Daphne was correctly running the application.
 
 ---
 
-###  File Upload Handling in Chat
+### File Upload Handling in Chat
 
 Another challenge was implementing file uploads alongside real-time messaging.
 
 WebSockets do not handle file uploads directly, so combining file uploads with live chat was difficult.
 
-**Solution:**
+**Solution:**  
 I handled file uploads using a separate HTTP POST request (HTMX form), while keeping text messages over WebSockets. After uploading, I manually triggered the message broadcast so the file appeared in the chat instantly.
 
 ---
 
-###  PostgreSQL Migration & Permission Issues
+### PostgreSQL Migration & Permission Issues
 
 When switching from SQLite to PostgreSQL, I faced a migration error:
 
@@ -592,65 +745,90 @@ When switching from SQLite to PostgreSQL, I faced a migration error:
 
 This prevented Django from creating database tables.
 
-**Solution:**
-After researching, I resolved the issue by granting proper permissions to the database user:
+**Solution:**  
+After researching, I resolved the issue by granting proper permissions to the database user, which I have outlined below:
 
 ```sql
 GRANT USAGE, CREATE ON SCHEMA public TO your_user;
+```
 
+---
 
-Online User Tracking:
+### Online User Tracking
 
-Tracking online users in real-time was more complex than expected.
+Tracking online users in real-time was more complex and complicated than expected.
 
-Challenges included:
-adding/removing users correctly on connect/disconnect
+**Challenges included:**
+- adding/removing users correctly on connect/disconnect  
+- keeping the count accurate across multiple users  
 
-keeping the count accurate across multiple users
+**Solution:**  
+I used a many-to-many field (`users_online`) in the chat group model and updated it in the WebSocket consumer during connection and disconnection events. The updated count is broadcast to all users in the chat.
 
-Solution:
-I used a many-to-many field (users_online) in the chat group model and updated it in the WebSocket consumer during connection and disconnection events. The updated count is broadcast to all users in the chat.
+---
 
+### UI & Layout Issues
 
-UI & Layout Issues
-While designing the interface, I initially used multiple layout templates which caused inconsistent styling and layout issues.
+During development, I initially used multiple layout templates, which led to inconsistent styling across different pages.
 
-I also faced problems where:
-text was not clearly visible (colour contrast issues)
+I also faced some usability issues, such as poor text visibility due to colour contrast and a chat interface that felt too boxed and cluttered.
 
-chat UI looked too boxed or cluttered
+**Solution:**  
+To fix this, I simplified the layout structure and standardised the design across the application. I used Tailwind CSS to improve spacing, colours, and responsiveness. These changes made the interface cleaner, easier to read, and more user-friendly across different devices.
 
-Solution:
-I simplified the layout structure and focused on a cleaner, responsive design using Tailwind CSS. I adjusted spacing, colours, and layout structure to improve readability and usability across devices.
+---
 
-Teacher Permissions & Group Management
-Designing the teacher system required careful thinking.
-Challenges:
-ensuring only approved teachers can create groups
-allowing teachers to manage members
-handling what happens when a teacher is disapproved
-Solution:
+### Teacher Permissions & Group Management
+
+Designing the teacher system required careful thinking and consideration based on project requirements.
+
+**Challenges:**
+- ensuring only approved teachers can create groups  
+- allowing teachers to manage members  
+- handling what happens when a teacher is disapproved  
+
+**Solution:**  
 I implemented role checks in both views and WebSocket consumers. I also made a design decision that disapproving a teacher should remove their permissions but not delete existing class groups, to avoid losing student data.
 
-Combining Multiple Technologies
-The project combines Django, Channels, HTMX, Alpine.js, and PostgreSQL.
+---
+
+### Combining Multiple Technologies
+
+The project combines Django, Channels, HTMX, Alpine.js, Redis, and PostgreSQL.
+
 One challenge was making sure all these parts worked together correctly without conflicts.
-Solution:
+
+**Solution:**  
 I kept the frontend simple and used HTMX and Alpine.js instead of a complex framework. This made integration easier and reduced bugs.
 
-Future Improvements
+---
 
-* Message translation (multi-language support)
-* Notifications system
-* Better mobile responsiveness
-* Message reactions
+### Message Translation Feature
+
+Initially, due to short timeframe, message translation was considered an optional feature. However, using a Python library (`deep-translator`), I was able to implement it in a simple and efficient way.
+
+This feature can be particularly useful in bilingual or multilingual educational settings, where it helps reduce language barriers between peers.
+
+To keep the system lightweight and avoid unnecessary complexity, translated messages are not stored in the database. Instead, they are generated and displayed instantly when requested.
+
+In my opinion, this approach provides a practical balance — adding useful functionality without making the system heavy or over-engineered.
+
+---
+
+## Future Improvements
+
+- Voice transcription  
+- Notifications system  
+- Better mobile responsiveness  
+- Message reactions  
 
 ---
 
 ##  Author
 
-Musa
+Musadiq Hussain
 Final Year Computing Student
+Dublin Business School
 
 ---
 

@@ -26,7 +26,7 @@ class ChatmessageCreateForm(ModelForm):
         if not file:
             return file
 
-        #Only mentiioned image format and PDFs acceptable.
+        #Only mentioned image format and PDFs acceptable.
         allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf']
         ext = file.name.split('.')[-1].lower()
 
@@ -45,13 +45,14 @@ class ChatmessageCreateForm(ModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        # If there are already errors, don't add more
+        # If already errors return only clean data
         if self.errors:
             return cleaned_data
 
         body = (cleaned_data.get('body') or '').strip()
         file = cleaned_data.get('file')
 
+        #Avoids sending empty messages
         if not body and not file:
             raise forms.ValidationError("Please add a message or choose a file.")
 

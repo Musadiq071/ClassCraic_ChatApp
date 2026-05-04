@@ -8,7 +8,7 @@ from allauth.account.models import EmailAddress
 def user_postsave(sender, instance, created, **kwargs):
     user = instance
     
-    # add profiles if user is created
+    # create profiles if user is created
     if created:
         Profile.objects.create(
             user = user,
@@ -22,7 +22,7 @@ def user_postsave(sender, instance, created, **kwargs):
                 email_address.save()
         
         except:
-            #if allauth email addresses doesnt exists create one 
+            #if allauth email addresses does'nt exists create one 
             EmailAddress.objects.create(
                 user = user,
                 email = user.email,
