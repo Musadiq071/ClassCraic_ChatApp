@@ -1,6 +1,5 @@
 # ClassCraic 
 
-
 ## Overview
 
 Class Craic is specially designed for the purpose of communication among teachers and students. The platform provides multiple forms of interaction which include public chat, Private messaging and class-based group chats.
