@@ -9,6 +9,15 @@
 
         <nav class="relative">
             <ul class="navitems flex items-center gap-2">
+
+                
+                <li>
+                    <a href="{% url 'about' %}"
+                    class="rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                    About
+                    </a>
+                </li>
+
                 {% if request.user.is_authenticated %}
                     <li>
                         <a href="/">Home</a>
@@ -53,6 +62,7 @@
                             </ul>
                         </div>
                     </li>
+
                 {% else %}
                     <li>
                         <a href="{% url 'account_login' %}">Login</a>
@@ -61,6 +71,7 @@
                         <a href="{% url 'account_signup' %}?next={% url 'profile-onboarding' %}">Signup</a>
                     </li>
                 {% endif %}
+
             </ul>
         </nav>
     </div>

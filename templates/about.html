@@ -1,0 +1,108 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto px-6 py-16 text-gray-900 space-y-12">
+
+    
+    <div class="space-y-3">
+        <h1 class="text-4xl font-bold">About ClassCraic</h1>
+        <p class="text-gray-600 text-sm leading-6 max-w-2xl">
+            ClassCraic is a real-time chat app for students and teachers. It helps users communicate in an organised way through class groups, private chats, and shared discussions.
+        </p>
+    </div>
+
+    
+    <section class="space-y-3">
+        <h2 class="text-2xl font-semibold">What does ClassCraic offer?</h2>
+        <p class="text-gray-700 text-sm leading-6">
+            ClassCraic is an educational chat application where teachers can create and manage class groups, and students can join those groups using a join code. This allows students to participate only in the classes they are part of.
+            In addition to class groups, the platform includes a public chat where all users can connect for general discussions and announcements and a private chat for one to one communication among peers.
+            The application also provides a message translation feature, allowing students to communicate more comfortably in different languages. Messages can be translated into English by just pressing a button.
+            Users can also share files within chats, making it easier to exchange learning materials and resources.
+        </p>
+    </section>
+
+    
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold">Who can do what?</h2>
+
+        <div class="grid md:grid-cols-3 gap-4">
+
+            <div class="bg-white rounded-xl p-5 border shadow-sm">
+                <h3 class="font-semibold text-lg mb-2">Student</h3>
+                <ul class="text-gray-700 text-sm space-y-2 list-disc ml-5">
+                    <li>Join classes using a code</li>
+                    <li>Send messages in real time</li>
+                    <li>Upload files</li>
+                    <li>Use private chat</li>
+                    <li>Cannot create class groups</li>
+                </ul>
+            </div>
+
+            <div class="bg-white rounded-xl p-5 border shadow-sm">
+                <h3 class="font-semibold text-lg mb-2">Teacher</h3>
+                <ul class="text-gray-700 text-sm space-y-2 list-disc ml-5">
+                    <li>Everything a student can do</li>
+                    <li>Create class groups (after approval)</li>
+                    <li>Share join codes</li>
+                    <li>Manage group members</li>
+                </ul>
+            </div>
+
+            <div class="bg-white rounded-xl p-5 border shadow-sm">
+                <h3 class="font-semibold text-lg mb-2">Admin</h3>
+                <ul class="text-gray-700 text-sm space-y-2 list-disc ml-5">
+                    <li>Approve teachers</li>
+                    <li>Manage users and groups</li>
+                    <li>Full system control</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold">How it works</h2>
+
+        <div class="space-y-4 text-sm text-gray-700">
+
+            <div class="bg-white rounded-xl p-5 border shadow-sm">
+                <p><strong>1.</strong> Sign up and verify your email</p>
+                <p><strong>2.</strong> Log in to access chat</p>
+                <p><strong>3.</strong> Join a class using a code (students)</p>
+                <p><strong>4.</strong> Create a class group (teachers)</p>
+                <p><strong>5.</strong> Start chatting instantly</p>
+            </div>
+
+        </div>
+    </section>
+
+    
+    <section class="space-y-3">
+        <h2 class="text-2xl font-semibold">Features</h2>
+        <ul class="text-gray-700 text-sm space-y-1 list-disc ml-5">
+            <li>Real-time messaging</li>
+            <li>Class groups with join codes</li>
+            <li>Private chat</li>
+            <li>File sharing (images & PDF, max 5MB)</li>
+            <li>Message translation</li>
+        </ul>
+    </section>
+
+    
+    <section class="space-y-3">
+        <h2 class="text-2xl font-semibold">Simple example</h2>
+        <div class="bg-white rounded-xl p-5 border shadow-sm text-sm text-gray-700">
+            <p>
+                A teacher creates a class → shares a join code → students enter it → everyone starts chatting.
+            </p>
+        </div>
+    </section>
+
+
+
+</div>
+
+{% endblock %}
